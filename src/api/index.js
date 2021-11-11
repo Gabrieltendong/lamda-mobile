@@ -211,6 +211,22 @@ export const updateProfil = (idAbonne, data,token) => {
     })
 }
 
+export const updateAvatar = (idAbonne, data,token) => {
+    return http.put(`/abonnes/${idAbonne}/`, data, {
+        headers: {
+            "Authorization": "Bearer " + token
+        },
+    })
+}
+
+export const getMissions = (token) => {
+    return http.get(`/missions/`, {
+        headers: {
+            "Authorization": "Bearer " + token
+        },
+    })
+}
+
 
 
 

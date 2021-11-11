@@ -41,6 +41,8 @@ const Drawer = createDrawerNavigator();
 export default function MyDrawer() {
   return (
     <Drawer.Navigator
+      drawerStyle = {{width: '80%'}}
+      drawerType = 'slide'
       drawerContent={({navigation}) => <DrawerContainer navigation={navigation} />}
     >
       <Drawer.Screen name="Feed" component={MyTabs} />

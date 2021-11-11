@@ -19,6 +19,7 @@ export const DISCUSSION = "Discussion";
 export const PROFIL_ENTERPRISE = "ProfilEnterprise"
 export const LAMDA_STORE = "LamdaStore"
 export const PROFIL = "Profil"
+export const DRAWER = "Drawer"
 
 export const HOMESTART = 'Home_start';
 export const COINSTART = 'Coin_start';

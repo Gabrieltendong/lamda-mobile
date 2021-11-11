@@ -5,14 +5,26 @@ import Container from '../../components/Container';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Input from '../../components/Input';
 
-const Chat = ({navigation}) => {
+const Chat = ({navigation, route}) => {
+
+    const {item} = route.params
+    
+    const chatSocket = new WebSocket(
+        'wss://lamda-cm.herokuapp.com/ws/chat/'
+        + item.id
+        + '/'
+    );
+
+    chatSocket.onopen = function(e){
+        console.log('test')
+    }; 
     
     useEffect(() => {
         
     }, [])
 
     return(
-        <Container>
+        <View style = {styles.container_full}>
             <View style={styles.header}>
                 <Ionicons 
                     name="arrow-back"
@@ -64,16 +76,20 @@ const Chat = ({navigation}) => {
 
             </ScrollView>
 
-            <Input 
-                placeholder="Ecrivez votre message..."
-                style={styles.input}
-            />
-
-        </Container>
+            <View style = {styles.footer}>
+                <Input 
+                    placeholder="Ecrivez votre message..."
+                    style={styles.input}
+                />
+            </View>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
+    container_full: {
+        flex: 1
+    },
     container: {
         backgroundColor: colors.white,
         borderRadius: 20,
@@ -119,6 +135,12 @@ const styles = StyleSheet.create({
 
     input: {
         marginHorizontal: 20,
+    },
+    footer: {
+        width: '100%',
+        height: 60,
+        position: 'absolute',
+        bottom: 40
     }
 });
 

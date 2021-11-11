@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import colors from '../../assets/themes/colors';
 import { URL } from '../../api/config';
@@ -27,10 +28,10 @@ const Header = ({navigation}) => {
                 style = {styles.avatar}
                 onPress = {() => navigation.navigate(PROFIL)}
             >
-                <Feather
-                    name = "user"
+                <Ionicons
+                    name = "person-outline"
                     color = "#fff"
-                    size = {40}
+                    size = {25}
                 />
             </TouchableOpacity>
         </View>
@@ -60,8 +61,8 @@ const styles = StyleSheet.create({
         transform: [{rotate: "90deg", }]
     },
     avatar: {
-        height: 60,
-        width: 60,
+        height: 40,
+        width: 40,
         borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',

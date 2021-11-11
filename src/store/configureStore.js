@@ -11,6 +11,7 @@ import accessPointReducer from './reducers/accessPointReducer'
 import feedReducer from './reducers/feedReducer'
 import clientReducer from './reducers/clientReducer'
 import storeReducer from './reducers/storeReducer'
+import missionsReducer from './reducers/missionsReduccer'
 
 const persistConfig = {
   key: 'root',
@@ -24,7 +25,8 @@ const rootReducer = combineReducers({
     accessPoint: accessPointReducer,
     feed: feedReducer,
     client: clientReducer,
-    stores: storeReducer
+    stores: storeReducer,
+    missions: missionsReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

@@ -1,14 +1,24 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import colors from '../../assets/themes/colors';
 import Mission from '../../components/Mission';
 import Btn from '../../components/Btn';
 import {ACTUALITES} from '../../constants/routeName';
 import ValidationCondition from '../../components/ValidationCondition';
+import { useDispatch, useSelector } from 'react-redux';
+import { get_missions_list } from '../../store/actions/missions';
 
 const Missions = ({navigation}) => {
 
+    const dispatch = useDispatch()
+    const { list } = useSelector(state => state.missions)
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
+
+    console.log('list', list)
+
+    useEffect(() => {
+        dispatch(get_missions_list())
+    }, [])
 
     return(
         <ScrollView>

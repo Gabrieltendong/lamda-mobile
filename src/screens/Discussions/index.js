@@ -26,7 +26,7 @@ const Discussions = ({navigation}) => {
 
     const renderItem = (({item, index}) => (
         <DiscussionItem
-            // onPress={() => navigation.navigate(CHAT, {item})}
+            onPress={() => navigation.navigate(CHAT, {item})}
             item = {item}
         />
     ))
