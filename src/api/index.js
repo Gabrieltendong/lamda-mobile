@@ -227,6 +227,14 @@ export const getMissions = (token) => {
     })
 }
 
+export const getChatId = (token, idUser1, idUser2) => {
+    return http.get(`/contact/${idUser1}/${idUser2}`, {
+        headers: {
+            "Authorization": "Bearer " + token
+        },
+    })
+}
+
 
 
 

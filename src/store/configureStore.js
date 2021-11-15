@@ -12,11 +12,12 @@ import feedReducer from './reducers/feedReducer'
 import clientReducer from './reducers/clientReducer'
 import storeReducer from './reducers/storeReducer'
 import missionsReducer from './reducers/missionsReduccer'
+import chatReducer from './reducers/chatReducer';
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['application', 'stores']
+  blacklist: ['application', 'stores', 'chat']
 }
 
 const rootReducer = combineReducers({
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
     feed: feedReducer,
     client: clientReducer,
     stores: storeReducer,
-    missions: missionsReducer
+    missions: missionsReducer,
+    chat: chatReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

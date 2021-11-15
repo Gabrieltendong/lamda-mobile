@@ -29,7 +29,7 @@ const DrawerContainer = ({navigation}) => {
 
     const onCall = () => {
         const args = {
-            number: '694610759', // String value with the number to call
+            number: '656000126', // String value with the number to call
             prompt: false // Optional boolean property. Determines if the user should be prompt prior to the call 
           }
            
@@ -37,7 +37,7 @@ const DrawerContainer = ({navigation}) => {
     }
 
     const sendMail = () => {
-        Linking.openURL("mailto:lamda@gmail.com")
+        Linking.openURL("mailto:infos@lamda.cm")
     }
 
     if(user.user){

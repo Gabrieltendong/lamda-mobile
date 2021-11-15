@@ -113,10 +113,10 @@ const DetailFeed = ({route}) => {
                     />
                     <TouchableOpacity onPress = {addComment}>
                     <Ionicons
-                            name = "paper-plane"
-                            size = {25}
-                            style = {styles.paperIconStyle}
-                            color = {colors.green}
+                        name = "paper-plane"
+                        size = {25}
+                        style = {styles.paperIconStyle}
+                        color = {colors.green}
                     />
                     </TouchableOpacity>
                 </View>
