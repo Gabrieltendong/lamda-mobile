@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TextInput } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 import colors from '../../assets/themes/colors';
 import Container from '../../components/Container';
@@ -32,10 +33,16 @@ const Discussions = ({navigation}) => {
     ))
 
     return(
-        <Container style={styles.container}>
-            <Header 
-                navigation={navigation}
-            />
+        <View style={styles.container}>
+            <View style = {styles.searchBar}>
+                <Ionicons name = 'search' size = {30}/>
+                <TextInput
+                    placeholder = "rechercher" 
+                    style = {styles.input}
+                    placeholderTextColor = '#777'
+                />
+            </View>
+            <Text style = {styles.title}>Messages</Text>
             <Loading isVisible = {isLoading} />
             <View style={styles.hContainer}>
                 <FlatList
@@ -44,7 +51,7 @@ const Discussions = ({navigation}) => {
                     contentContainerStyle = {{paddingBottom: 50}}
                 />
             </View>
-        </Container>
+        </View>
     )
 }
 
@@ -52,8 +59,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 30,
+        paddingHorizontal: 20
     },
-
     hContainer: {
         height: '100%',
         backgroundColor: colors.white,
@@ -62,6 +69,27 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 30,
         marginTop: 20,
+    },
+    searchBar: {
+        height: 50,
+        backgroundColor: '#fff',
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: 25,
+        shadowColor: '#777',
+        shadowOffset: { height: 1, width: 1 },
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+        elevation: 5,
+        paddingHorizontal: 10,
+        marginVertical: 10
+    },
+    title: {
+        fontSize: 30,
+        fontWeight: 'bold'
+    },
+    input: {
+        color: '#777'
     }
 });
 

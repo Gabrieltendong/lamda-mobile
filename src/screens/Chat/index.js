@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, TextInput, FlatList } from 'react-native';
 import colors from '../../assets/themes/colors';
 import Container from '../../components/Container';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -57,17 +57,15 @@ class Chat extends Component {
     }
     
 
-    componentDidMount() {
+    async componentDidMount() {
 
-        this.getChatId()
+       await this.getChatId()
         
         this.chatSocket = new WebSocket(
             'wss://lamda-cm.herokuapp.com/ws/chat/'
             + this.props.idChat
             + '/'
         );
-
-        console.log('user', this.props.user.user)
     
         this.chatSocket.onopen = (e) => {
             this.fecthMessage()
@@ -76,7 +74,7 @@ class Chat extends Component {
         this.chatSocket.onmessage = (e) => {
             console.log(e.data)
             let data = JSON.parse(e.data)
-            if(data.messages) this.setState({messages: data.messages})
+            if(data.messages) this.setState({messages: data.messages.reverse()})
             else this.setMessages(data.message.message)
         };
     
@@ -91,46 +89,53 @@ class Chat extends Component {
         const { user } = this.props
         const {item} = this.props.route.params
         const { messages } = this.state
+        console.log('item', item)
 
         return(
             <View style = {styles.container_full}>
                 <View style={styles.header}>
                     <Ionicons 
-                        name="arrow-back"
+                        name="chevron-back-outline"
                         size={30}
+                        onPress = {() => this.props.navigation.goBack()}
                     />
-                    <Text style={styles.title}>Chat</Text>
+                    <Image 
+                        source={{uri: 'https://miro.medium.com/max/1200/0*lf2XvQsiQG-HOz8D.jpg'}} 
+                        style={styles.avatar}
+                    />
+                    <View>
+                        <Text style={styles.title}>{item.user.first_name} {item.user.last_name}</Text>
+                    </View>
                 </View>
-    
-                <ScrollView style = {styles.content} keyboardShouldPersistTaps = 'always'>
-                    {
-                        messages.map((message, index) => {
-                            if(message.auteur != user.user.email)
+                <FlatList
+                    data = {messages}
+                    style = {styles.content}
+                    inverted = {true}
+                    renderItem = {({item}) => {
+                        if(item.auteur != user.user.email)
                                 return(
                                     <View style={styles.receiver_wrapper}>
-                                        <Image 
-                                            source={{uri: 'https://miro.medium.com/max/1200/0*lf2XvQsiQG-HOz8D.jpg'}} 
-                                            style={styles.avatar}
-                                        />
-                                        <Text style = {styles.messsage_receiver}>{message.contenu}</Text>
+                                        <Text style = {styles.messsage_receiver}>{item.contenu}</Text>
+                                        <Text style = {styles.date}>{item.date}</Text>
                                     </View>
                                 )
                             else{
                                 return (
                                     <View style = {styles.sender_wrapper}>
-                                        <Text style = {styles.message_send}>{message.contenu}</Text>
+                                        <Text style = {styles.message_send}>{item.contenu}</Text>
                                     </View>
                                 )
                             }
-                        })
-                    }
-                </ScrollView>
+                    }}
+                    
+                />
                 <View style = {styles.footer}>
                     <View style = {styles.content_input}>
                         <TextInput 
                             placeholder="Ecrivez votre message..."
                             placeholderTextColor = '#444'
                             style={styles.input}
+                            multiline = {true}
                             defaultValue = {this.state.message}
                             onChangeText = {this.setMessage}
                         />
@@ -164,50 +169,56 @@ const mapDispatchToProps = dispatch => {
 const styles = StyleSheet.create({
     container_full: {
         flex: 1,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        paddingTop: 30
     },
     content: {
         flex: 1,
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
     },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
         padding: 20,
-        marginTop: 30,
-        backgroundColor: colors.white
+        backgroundColor: colors.white,
+        shadowColor: '#777',
+        shadowOffset: { height: 1, width: 1 },
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+        elevation: 5,
     },
     title: {
-        fontSize: 20,
-        color: colors.primary1,
-        textTransform: 'uppercase',
+        fontSize: 16,
         marginLeft: 10,
     },
     avatar: {
-        width: 20,
-        height: 20,
+        width: 40,
+        height: 40,
         borderRadius: 20,
         marginRight: 10
     },
     input: {
         marginHorizontal: 20,
         flex: 1,
+        color: '#777'
     },
     footer: {
         width: '100%',
         height: 60,
-        position: 'absolute',
-        bottom: 20,
+        // position: 'absolute',
+        // bottom: -40,
         paddingHorizontal: 20
     },
     receiver_wrapper: {
-        flexDirection: 'row',
-        backgroundColor: '#f6f6f6',
         alignSelf: 'flex-start',
         maxWidth: '80%',
+        marginVertical: 10,
+    },
+    messsage_receiver: {
+        backgroundColor: '#f6f6f6',
+        borderRadius: 10,
         padding: 10,
-        marginVertical: 5,
-        borderRadius: 10
+        alignSelf: 'flex-start'
     },
     sender_wrapper: {
         maxWidth: '80%',
@@ -225,8 +236,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderRadius: 25
     },
-    messsage_receiver: {
-        flex: 1
+    date: {
+        fontSize: 9,
+        marginTop: 5
     }
 });
 
