@@ -1,5 +1,5 @@
 import { 
-    getMissions,
+    getListSondage,
     auth
 } from '../../api';
 
@@ -15,7 +15,7 @@ const user = store.getState().userReducer.memoryUser
 export const get_missions_list = () => (dispatch) => {
     dispatch(uiLoading())
     auth(user).then((res) => {
-        getMissions(res.data.access)
+        getListSondage(res.data.access)
         .then((resp) => {
             dispatch(uiLoading())
             dispatch({

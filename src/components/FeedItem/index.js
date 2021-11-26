@@ -96,12 +96,13 @@ const FeedItem = ({item, handleComment, handleLike, open, openProfil}) => {
                     />
                 }
                 <View style={styles.action}>
-                    <Ionicons 
-                        name="heart"
-                        size={20}
-                        color={item.likes.includes(userId)?'orange': colors.white}
-                        onPress = {() => handleLike(item)}
-                    />
+                    <TouchableOpacity onPress = {() => handleLike(item)}>
+                        <Ionicons 
+                            name="heart"
+                            size={20}
+                            color={item.likes.includes(userId)?'orange': colors.white}
+                        />
+                    </TouchableOpacity>
                     <Ionicons 
                         name="chatbubble"
                         size={20}

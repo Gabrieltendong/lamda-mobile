@@ -156,7 +156,7 @@ export const getAbonne = (token) => {
 }
 
 export const onLike = (idFeed, token) => {
-    return http.get(`/publications/${idFeed}/like`, {
+    return http.get(`/publications/${idFeed}/like/`, {
         headers: {
             "Authorization": "Bearer " + token
         }
@@ -219,8 +219,8 @@ export const updateAvatar = (idAbonne, data,token) => {
     })
 }
 
-export const getMissions = (token) => {
-    return http.get(`/missions/`, {
+export const getListSondage = (token) => {
+    return http.get(`/sondage/`, {
         headers: {
             "Authorization": "Bearer " + token
         },
@@ -235,6 +235,14 @@ export const getChatId = (token, idUser1, idUser2) => {
     })
 }
 
+
+export const answers = (token, data) => {
+    return http.post(`/answers/`, data, {
+        headers: {
+            "Authorization": "Bearer " + token
+        },
+    })
+}
 
 
 

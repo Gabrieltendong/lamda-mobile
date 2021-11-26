@@ -1,12 +1,18 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, FlatList } from 'react-native'
 import colors from '../../assets/themes/colors'
+import QuestionItem from '../Questionitem'
 
-const Mission = ({title, description}) => {
+const Mission = ({item}) => {
     return (
         <View>
-            <Text style={[styles.texte, {color: colors.tertiary1}]}>{title}</Text>
-            <Text style={[styles.texte, {color: colors.grey}]}>{description}</Text>
+            <View style = {styles.header_sondage}>
+                <Text>{item.titre}</Text>
+            </View>
+            <FlatList
+                data = {item?.questions}
+                renderItem  = {({item, index}) => <QuestionItem item = {item} selectedResponse = {selectedResponse}  />}
+            />
         </View>
     )
 }
@@ -14,8 +20,12 @@ const Mission = ({title, description}) => {
 export default Mission
 
 const styles = StyleSheet.create({
-    texte: {
-        textAlign: 'center',
-        marginBottom: 10
+    header_sondage: {
+        height: 80,
+        borderRadius: 10,
+        backgroundColor: colors.primary1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 20
     }
 })

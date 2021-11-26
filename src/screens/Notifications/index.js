@@ -29,23 +29,34 @@ const Notifications = () => {
                     <Ionicons 
                         name="notifications-outline" 
                         size={25} 
-                        color={colors.primary1} 
-
+                        color={'#000'} 
                     />
                     <Text style={[styles.title, {marginLeft: 10}]}>Notifications</Text>
                 </View>
             </View>
-            <FlatList
-                style = {styles.content}
-                data = {notifications}
-                renderItem = {({item}) => (
-                    <Notification
-                        title = {item.titre}
-                        text= {item.message}
-                        date= {date(item.date_notification)}
+            {
+                notifications.length == 0?
+                <View style = {styles.empty_notification}>
+                    <Ionicons
+                        name = "notifications-off-outline"
+                        style = {styles.icon_notification}
+                        size = {40}
                     />
-                )}
-            />
+                    <Text style = {styles.text_empty_notification}>Aucune notification pour le moment</Text>
+                </View>
+                :
+                <FlatList
+                    style = {styles.content}
+                    data = {notifications}
+                    renderItem = {({item}) => (
+                        <Notification
+                            title = {item.titre}
+                            text= {item.message}
+                            date= {date(item.date_notification)}
+                        />
+                    )}
+                />
+            }
         </View>
     )
 }
@@ -53,11 +64,15 @@ const Notifications = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 30,
         backgroundColor: colors.white
     },
     content: {
         padding: 20
+    },
+    empty_notification: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     title: {
         fontSize: 25,

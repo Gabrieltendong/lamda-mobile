@@ -6,6 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Input from '../../components/Input';
 import { useSelector, useDispatch, connect } from 'react-redux';
 import { get_chat_id } from '../../store/actions/chat';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 class Chat extends Component {
 
@@ -32,7 +33,7 @@ class Chat extends Component {
     getChatId = () => {
         const {item} = this.props.route.params
         const { dispatch, user } = this.props
-        dispatch(get_chat_id(item.id, user.id))
+        return dispatch(get_chat_id(item.id, user.id))
     }
 
     setMessage = (message) => {
@@ -42,9 +43,9 @@ class Chat extends Component {
     }
 
     setMessages = (message) => {
-        this.setState({
-            messages: [...this.state.messages, message]
-        })
+        let newMessageList = [...this.state.messages]
+        newMessageList.unshift(message)
+        this.setState({messages: newMessageList})
     }
 
     fecthMessage = () => {
@@ -59,29 +60,30 @@ class Chat extends Component {
 
     async componentDidMount() {
 
-       await this.getChatId()
+       this.getChatId()
+       .then(() => {
+            this.chatSocket = new WebSocket(
+                'wss://lamda-cm.herokuapp.com/ws/chat/'
+                + this.props.idChat
+                + '/'
+            );
+    
+            this.chatSocket.onopen = (e) => {
+                this.fecthMessage()
+            }; 
+    
+            this.chatSocket.onmessage = (e) => {
+                console.log(e.data)
+                let data = JSON.parse(e.data)
+                if(data.messages) this.setState({messages: data.messages.reverse()})
+                else this.setMessages(data.message.message)
+            };
         
-        this.chatSocket = new WebSocket(
-            'wss://lamda-cm.herokuapp.com/ws/chat/'
-            + this.props.idChat
-            + '/'
-        );
-    
-        this.chatSocket.onopen = (e) => {
-            this.fecthMessage()
-        }; 
-    
-        this.chatSocket.onmessage = (e) => {
-            console.log(e.data)
-            let data = JSON.parse(e.data)
-            if(data.messages) this.setState({messages: data.messages.reverse()})
-            else this.setMessages(data.message.message)
-        };
-    
-        this.chatSocket.onclose = function(e) {
-            console.error('Chat socket closed unexpectedly');
-        };
-    
+            this.chatSocket.onclose = function(e) {
+                console.error('Chat socket closed unexpectedly');
+            };
+
+        })
     }
 
     render(){
@@ -89,7 +91,7 @@ class Chat extends Component {
         const { user } = this.props
         const {item} = this.props.route.params
         const { messages } = this.state
-        console.log('item', item)
+        console.log('message', messages)
 
         return(
             <View style = {styles.container_full}>
@@ -111,18 +113,20 @@ class Chat extends Component {
                     data = {messages}
                     style = {styles.content}
                     inverted = {true}
-                    renderItem = {({item}) => {
+                    keyExtractor = {(item, index) => String(index)}
+                    renderItem = {({item, index}) => {
                         if(item.auteur != user.user.email)
                                 return(
-                                    <View style={styles.receiver_wrapper}>
+                                    <View key = {index} style={styles.receiver_wrapper}>
                                         <Text style = {styles.messsage_receiver}>{item.contenu}</Text>
                                         <Text style = {styles.date}>{item.date}</Text>
                                     </View>
                                 )
                             else{
                                 return (
-                                    <View style = {styles.sender_wrapper}>
+                                    <View key = {index} style = {styles.sender_wrapper}>
                                         <Text style = {styles.message_send}>{item.contenu}</Text>
+                                        <Text style = {styles.date}>{item.date}</Text>
                                     </View>
                                 )
                             }
@@ -139,13 +143,14 @@ class Chat extends Component {
                             defaultValue = {this.state.message}
                             onChangeText = {this.setMessage}
                         />
-                        <Ionicons
-                            name = "paper-plane"
-                            size = {25}
-                            style = {styles.paperIconStyle}
-                            color = {colors.primary1}
-                            onPress = {this.sendMessage}
-                        />
+                        <TouchableOpacity onPress = {this.sendMessage}>
+                            <Ionicons
+                                name = "paper-plane"
+                                size = {25}
+                                style = {styles.paperIconStyle}
+                                color = {colors.primary1}
+                            />
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -222,10 +227,13 @@ const styles = StyleSheet.create({
     },
     sender_wrapper: {
         maxWidth: '80%',
-        padding: 10,
         alignSelf: 'flex-end',
-        backgroundColor: colors.primary1,
         marginVertical: 5,
+    },
+    message_send: { 
+        alignSelf: 'flex-end',
+        padding: 10,
+        backgroundColor: colors.primary1,
         borderRadius: 10
     },
     content_input: {
