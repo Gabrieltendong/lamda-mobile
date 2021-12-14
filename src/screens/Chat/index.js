@@ -30,7 +30,7 @@ class Chat extends Component {
         this.setMessage('')
     }
 
-    getChatId = () => {
+    getChatId = async () => {
         const {item} = this.props.route.params
         const { dispatch, user } = this.props
         return dispatch(get_chat_id(item.id, user.id))
@@ -60,30 +60,29 @@ class Chat extends Component {
 
     async componentDidMount() {
 
-       this.getChatId()
-       .then(() => {
-            this.chatSocket = new WebSocket(
-                'wss://lamda-cm.herokuapp.com/ws/chat/'
-                + this.props.idChat
-                + '/'
-            );
-    
-            this.chatSocket.onopen = (e) => {
-                this.fecthMessage()
-            }; 
-    
-            this.chatSocket.onmessage = (e) => {
-                console.log(e.data)
-                let data = JSON.parse(e.data)
-                if(data.messages) this.setState({messages: data.messages.reverse()})
-                else this.setMessages(data.message.message)
-            };
-        
-            this.chatSocket.onclose = function(e) {
-                console.error('Chat socket closed unexpectedly');
-            };
+        await this.getChatId()
+        console.log('id', this.props.idChat)
+        this.chatSocket = new WebSocket(
+            'wss://lamda-cm.herokuapp.com/ws/chat/'
+            + this.props.idChat
+            + '/'
+        );
+        this.chatSocket.onopen = (e) => {
+            console.log("connected")
+            this.fecthMessage()
+        }; 
 
-        })
+        this.chatSocket.onmessage = (e) => {
+            console.log(e.data)
+            let data = JSON.parse(e.data)
+            if(data.messages) this.setState({messages: data.messages.reverse()})
+            else this.setMessages(data.message.message)
+        };
+
+        this.chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly', e);
+        };
+
     }
 
     render(){
@@ -91,7 +90,6 @@ class Chat extends Component {
         const { user } = this.props
         const {item} = this.props.route.params
         const { messages } = this.state
-        console.log('message', messages)
 
         return(
             <View style = {styles.container_full}>

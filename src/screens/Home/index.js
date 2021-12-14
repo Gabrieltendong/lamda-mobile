@@ -33,9 +33,9 @@ const Home = ({navigation}) => {
 
     return(
         <Container style={styles.container}>
-            <Header 
-                navigation={navigation}
-            />
+            <View>
+                <Text style = {styles.title_header}>Les point d'accès Autour de vous</Text>
+            </View>
             <View style={styles.hContainer}>
                 <FlatList 
                     data = {listPoint}
@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 30,
     },
-
     hContainer: {
         height: '100%',
         backgroundColor: colors.white,
@@ -61,6 +60,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 30,
         marginTop: 20,
+    },
+    title_header: {
+        fontSize: 25,
+        width: '70%',
+        marginLeft: 20,
+        color: '#fff',
+        fontWeight: 'bold'
     }
 });
 

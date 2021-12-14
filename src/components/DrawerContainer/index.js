@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { StyleSheet, Text, View, Image, TouchableOpacity, Share, Linking } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -13,6 +13,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 const DrawerContainer = ({navigation}) => {
 
+    const [isLoad, setIsLoad] = useState(false)
     const user = useSelector(state => state.userReducer.profil);
     const dispatch = useDispatch();
 
@@ -45,13 +46,20 @@ const DrawerContainer = ({navigation}) => {
         return (
             <View>
                 <View style={styles.header}>
-                    <View style={styles.image}>
+                    <View style = {styles.content_avatar}>
+                        <Ionicons
+                            name = 'person'
+                            size = {40}
+                            color = {'#777'}
+                        />
+                    </View>
+                    {/* <View style={styles.image}>
                         <Image 
                             source={{uri: URL + user.avatar}}
                             style={styles.user}
                         />
-                    </View>
-                    <View>
+                    </View> */}
+                    <View style = {styles.content_header_text}>
                         <Text style={styles.username}>{user.user.first_name} {user.user.last_name}</Text>
                         <Text style={styles.phone}>{user.telephone}</Text>
                     </View>
@@ -143,7 +151,10 @@ export default DrawerContainer
 
 const styles = StyleSheet.create({
     header: {
+        paddingTop: 40,
         paddingHorizontal: 10,
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     user: {
         width: 100,
@@ -162,16 +173,14 @@ const styles = StyleSheet.create({
         marginBottom: -50
     },
     username: {
-        marginTop: 20,
         textAlign: 'center',
-        marginBottom: 10,
-        fontSize: 12,
-        textTransform: 'uppercase',
+        fontSize: 16,
+        textTransform: 'capitalize',
         fontWeight: 'bold'
     },
     phone: {
-        textAlign: 'center',
-        fontSize: 20,
+        // textAlign: 'center',
+        fontSize: 12,
         color: colors.transparent
     },
     middle: {
@@ -213,5 +222,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginHorizontal: 20,
         marginTop: 20
+    },
+    content_avatar: {
+        height: 70,
+        width: 70,
+        borderRadius: 35,
+        backgroundColor: '#eee',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    content_header_text: {
+        marginLeft: 10
     }
 })

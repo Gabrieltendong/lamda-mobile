@@ -20,7 +20,7 @@ const ProfileScreen = () => {
     const [last_name, setLastName] = useState(profil?.user.last_name);
     const [email, setEmail] = useState(profil?.user.email);
     const [avatar, setAvatar] = useState(URL + profil.avatar);
-    const [date, setDate] = useState(profil.date_naissance)
+    const [date_naissance, setDate] = useState(profil.date_naissance)
     const [telephone, setTelephone] = useState(profil.telephone)
     const [isLoad, setIsLoad] = useState(true)
     const [sexe, setSexe] = useState(profil.sexe)
@@ -37,19 +37,7 @@ const ProfileScreen = () => {
     }
 
     const handleUpdate = () => {
-        const data = new FormData()
-        data.append("first_name", first_name)
-        data.append("last_name", last_name)
-        data.append("email", email)
-        data.append("telephone", telephone)
-        data.append("date_naissance", date)
-        data.append("sexe", sexe)
-        data.append("token", token)
-        data.append("avatar", {
-            uri: avatar,
-            type: 'image/jpeg',
-            name: "avatar.jpg"
-        })
+        const data = {first_name, last_name, telephone, date_naissance, sexe}
         
         dispatch(update_profil(data))
     }

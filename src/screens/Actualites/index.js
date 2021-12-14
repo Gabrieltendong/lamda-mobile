@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, StatusBar } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux'
 
 import { get_feed, comment_feed, like_feed, share_feed } from '@store/actions'
@@ -50,9 +50,9 @@ const Actualites = ({navigation}) => {
         />
     ))
 
-    console.log(listFeed)
     return(
-        <Container style={styles.container}>
+        <View style={styles.container}>
+            <StatusBar translucent backgroundColor = {colors.primary1} />
             <Loading isVisible = {isLoading} />
             <Header navigation={navigation} />
             <View style = {styles.content}>
@@ -64,14 +64,15 @@ const Actualites = ({navigation}) => {
                     refreshing={isFetching}
                 />
             </View>
-        </Container>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 30,
+        marginTop: 30,
+        backgroundColor: colors.primary1
     },
     header: {
         flexDirection: 'row',
@@ -87,12 +88,11 @@ const styles = StyleSheet.create({
     content: {
         height: '100%',
         backgroundColor: "#eee",
-        borderTopLeftRadius: 50,
-        borderTopRightRadius: 50,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
         paddingHorizontal: 20,
         paddingTop: 20,
         paddingBottom: 80,
-        marginTop: 20,
     }
 });
 

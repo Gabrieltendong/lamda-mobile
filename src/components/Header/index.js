@@ -12,28 +12,39 @@ const Header = ({navigation}) => {
     const user = useSelector(state => state.userReducer.profil)
     return (
         <View style={styles.container}>
-            <Feather
-                name="bar-chart-2"
-                size={40}
-                color={colors.white}
-                style = {styles.iconStyle}
-                onPress={() => navigation.openDrawer()}
-            />
-            <Text style={styles.title}>Lamda</Text>
+            {/* <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons
+                    name="arrow-back"
+                    size={30}
+                    color={colors.white}
+                    style = {styles.iconStyle}
+                />
+            </TouchableOpacity> */}
+            <Text style={styles.title}>Lamda Actualité</Text>
             {/* <Image
                 source={{uri: URL + user.avatar}}
                 style={styles.image} 
             /> */}
-            <TouchableOpacity 
-                style = {styles.avatar}
-                onPress = {() => navigation.navigate(PROFIL)}
-            >
-                <Ionicons
-                    name = "person-outline"
-                    color = "#fff"
-                    size = {25}
-                />
-            </TouchableOpacity>
+            <View style = {styles.row}>
+                {/* <TouchableOpacity 
+                    style = {styles.btnIcon}
+                    onPress = {() => navigation.navigate(PROFIL)}
+                >
+                    <Ionicons
+                        name = "search"
+                        size = {25}
+                    />
+                </TouchableOpacity> */}
+                <TouchableOpacity 
+                    style = {styles.btnIcon}
+                    onPress = {() => navigation.navigate(PROFIL)}
+                >
+                    <Ionicons
+                        name = "person-outline"
+                        size = {25}
+                    />
+                </TouchableOpacity>
+            </View>
         </View>
     )
 }
@@ -41,35 +52,37 @@ const Header = ({navigation}) => {
 const styles = StyleSheet.create({
 
     container: {
+        height: 60,
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 10
+        paddingHorizontal: 10,
     },
     title: {
-        color: colors.white,
-        fontSize: 20,
-        textTransform: 'uppercase',
-        fontWeight: 'bold'
+        flex: 1,
+        color: '#000',
+        fontSize: 22,
+        fontWeight: 'bold',
+        marginLeft: 10,
+        color: '#000'
     },
     image: {
         width: 40,
         height: 40,
         borderRadius: 50
     },
-    iconStyle: {
-        transform: [{rotate: "90deg", }]
-    },
-    avatar: {
+    btnIcon: {
         height: 40,
         width: 40,
         borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
-        borderColor: '#fff',
-        borderWidth: 1
+        backgroundColor: '#eee',
+        marginHorizontal: 5
+    },
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center'
     }
-
 })
 
 export default Header;

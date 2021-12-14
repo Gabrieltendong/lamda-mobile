@@ -18,7 +18,7 @@ export const get_register_form = (data) => {
     dataForm.append("last_name", data.last_name)
     dataForm.append("telephone", data.telephone)
     dataForm.append("sexe", data.sexe)
-    dataForm.append("avatar", data.avatar != undefined? {
+    dataForm.append("avatar", data.avatar != null? {
         uri: data.avatar.uri,
         type: data.avatar.type,
         name: data.avatar.fileName

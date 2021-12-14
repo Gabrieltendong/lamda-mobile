@@ -11,12 +11,14 @@ import { share_feed } from '@store/actions'
 import { store } from '@store/configureStore'
 import { DETAIL_FEED } from '../../constants/routeName'
 import { date } from '../../utils/date'
+import { mixins } from '../../styles';
 
 const FeedItem = ({item, handleComment, handleLike, open, openProfil}) => {
 
     const userId = store.getState().userReducer.user.abonne
     const [isVisible, setIsVisible] = useState(false)
     const [ isLoading, setisLoading ] = useState(false)
+    const [ muted, setMuted ] = useState(true)
     const dispatch = useDispatch()
 
     const handleToggle = () => {
@@ -27,8 +29,6 @@ const FeedItem = ({item, handleComment, handleLike, open, openProfil}) => {
         // if(network == "facebook") 
         dispatch(share_feed(item, network))
     }
-
-    console.log("item", item)
 
     return (
         <TouchableOpacity 
@@ -65,12 +65,16 @@ const FeedItem = ({item, handleComment, handleLike, open, openProfil}) => {
                         </TouchableOpacity>
                         <View>
                             <Text style = {styles.name__wrapper}>{item.client?.raison_social}</Text>
-                            <Text>{date(item.date_publication)}</Text>
+                            <Text style = {styles.date__wrapper}>{date(item.date_publication)}</Text>
                         </View>
                     </View>
                     :null
                 }
-                {/* <Text>{item.time}</Text> */}
+                {
+                    item?.description ?
+                    <Text style = {styles.description_wrapper} numberOfLines = {2}>{item.description}</Text>:null
+                }
+                
             </View>
             <View>
                 {
@@ -79,21 +83,30 @@ const FeedItem = ({item, handleComment, handleLike, open, openProfil}) => {
                         source={{uri: item.photo}}
                         style={[
                             styles.image,
-                            !item.client?.informations?{
-                                borderTopLeftRadius: 20,
-                                borderTopRightRadius: 20
-                            }:null
                         ]}
                         progressiveRenderingEnabled = {true}
                         onLoadStart = {setisLoading}
                         onLoadEnd = {setisLoading}
                     />
                     :
-                    <Video 
-                        source={{uri: item.video}}               
-                        style={styles.backgroundVideo}
-                        resizeMode = "stretch"
-                    />
+                    <View>
+                        <Video 
+                            source={{uri: item.video}}               
+                            style={styles.backgroundVideo}
+                            resizeMode = "stretch"
+                            ignoreSilentSwitch="ignore"
+                            muted = {muted}
+                        />
+                        <TouchableOpacity 
+                            style = {styles.btnVolume}
+                            onPress = {() => setMuted(!muted)}
+                        >
+                            <Ionicons
+                                name = {muted?'volume-mute':'volume-high'}
+                                size = {20}
+                            />
+                        </TouchableOpacity>
+                    </View>
                 }
                 <View style={styles.action}>
                     <TouchableOpacity onPress = {() => handleLike(item)}>
@@ -103,18 +116,20 @@ const FeedItem = ({item, handleComment, handleLike, open, openProfil}) => {
                             color={item.likes.includes(userId)?'orange': colors.white}
                         />
                     </TouchableOpacity>
-                    <Ionicons 
-                        name="chatbubble"
-                        size={20}
-                        color={colors.white}
-                        onPress = {() => handleComment(item)}
-                    />
-                    <Ionicons 
-                        name="share-social"
-                        size={20}
-                        color={colors.white}
-                        onPress = {handleToggle}
-                    />
+                    <TouchableOpacity onPress = {() => handleComment(item)}>
+                        <Ionicons 
+                            name="chatbubble"
+                            size={20}
+                            color={colors.white}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress = {handleToggle}>
+                        <Ionicons 
+                            name="share-social"
+                            size={20}
+                            color={colors.white}
+                        />
+                    </TouchableOpacity>
                 </View>
             </View>
         </TouchableOpacity>
@@ -126,9 +141,11 @@ export default FeedItem
 const styles = StyleSheet.create({
     container: {
         paddingTop: 20,
+        marginHorizontal: 1,
         backgroundColor: '#fff',
         borderRadius: 20,
-        marginVertical: 5
+        marginVertical: 5,
+        ...mixins.boxShadow('#000')
     },
     row: {
         flexDirection: 'row',
@@ -157,7 +174,7 @@ const styles = StyleSheet.create({
         right: 10,
         backgroundColor: colors.transparent,
         bottom: 20,
-        width: 130,
+        width: 150,
         height: 40,
         paddingHorizontal: 20,
         borderRadius: 50,
@@ -165,7 +182,8 @@ const styles = StyleSheet.create({
     backgroundVideo: {
         width: '100%',
         height: 400,
-        borderRadius: 20,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
         marginTop: 10
     },
     name__wrapper: {
@@ -177,5 +195,23 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         left: 0,
         right: 0
+    },
+    description_wrapper: {
+        margin: 10
+    },
+    date__wrapper: {
+        fontSize: 10,
+        color: '#777'
+    },
+    btnVolume: {
+        height: 40,
+        width: 40,
+        borderRadius: 20,
+        position: 'absolute',
+        bottom: 20,
+        left: 20,
+        backgroundColor: '#fff',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })

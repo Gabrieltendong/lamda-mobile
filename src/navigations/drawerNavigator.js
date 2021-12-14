@@ -2,7 +2,7 @@ import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import {MISSIONS, ACTUALITES, LAMDA_MONEY, DETAIL_FEED, PROFIL_ENTERPRISE, LAMDA_STORE} from '../constants/routeName';
+import {MISSIONS, ACTUALITES, LAMDA_MONEY, DETAIL_FEED, PROFIL_ENTERPRISE, LAMDA_STORE, PROFIL} from '../constants/routeName';
 import {MyTabs} from './bottomNavigator';
 import Missions from '../screens/Missions/index';
 import Actualites from '../screens/Actualites/index';
@@ -11,6 +11,7 @@ import DrawerContainer from '../components/DrawerContainer';
 import DetailFeed from '../screens/DetailFeed';
 import ProfilEnterprise from '../screens/ProfilEnterprise';
 import LamdaStore from '../screens/LamdaStore';
+import ProfileScreen from '../screens/Profile';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +32,10 @@ const ActualiteStack =() => {
         name={PROFIL_ENTERPRISE} 
         component={ProfilEnterprise}
         options={{headerShown: false}}
+      />
+      <Stack.Screen 
+        name={PROFIL} 
+        component={ProfileScreen}
       />
     </Stack.Navigator>
   );

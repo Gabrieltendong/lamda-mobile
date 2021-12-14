@@ -29,7 +29,7 @@ const Notifications = () => {
                     <Ionicons 
                         name="notifications-outline" 
                         size={25} 
-                        color={'#000'} 
+                        color={'#fff'} 
                     />
                     <Text style={[styles.title, {marginLeft: 10}]}>Notifications</Text>
                 </View>
@@ -64,7 +64,8 @@ const Notifications = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.white
+        // backgroundColor: colors.white,
+        paddingTop: 20
     },
     content: {
         padding: 20
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 25,
-        color: "#000",
+        color: "#fff",
         fontWeight: 'bold'
     },
 
@@ -84,6 +85,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        backgroundColor: colors.primary1
     },
 
     counter: {

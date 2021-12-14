@@ -2,15 +2,22 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { useDispatch } from 'react-redux';
 import colors from '../../assets/themes/colors';
+import { get_piece_or } from '../../store/actions/user';
 
 // create a component
 const StoreItem = ({item}) => {
+
+    const dispatch = useDispatch()
     
     const openLink = () => {
         Linking.canOpenURL(item.lien_app).then(supported => {
             if (supported) {
-              Linking.openURL(item.lien_app);
+              Linking.openURL(item.lien_app)
+              .then(() => {
+                dispatch(get_piece_or(2))
+              })
             } else {
               console.log("Don't know how to open URI: " + item.lien_app);
             }

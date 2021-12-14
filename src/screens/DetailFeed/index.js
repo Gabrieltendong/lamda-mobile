@@ -42,7 +42,7 @@ const DetailFeed = ({route}) => {
         }
     },[])
 
-    console.log("item", item)
+    console.log("item", item.partages)
     
     return (
         <View style={styles.container}>
@@ -82,7 +82,7 @@ const DetailFeed = ({route}) => {
                             name = "chatbubble-outline"
                             size = {25}
                         />
-                        <Text>{item.commentaires.length} commentaires</Text>
+                        <Text>{listComment.length} commentaires</Text>
                     </View>
                     <View style = {styles.col}>
                         <Ionicons

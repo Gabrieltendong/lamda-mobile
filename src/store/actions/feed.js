@@ -62,52 +62,64 @@ export const get_detail_feed = (idFeed) => (dispatch) => {
 }
 
 export const share_feed = (feed, network) => (dispatch) => {
-    console.log("infosUser", infosUser)
+    console.log("user", infosUser.user.reseaux)
     let imagePath = null;
     let shareOptions = {
         title: 'Share via',
-        message: 'some message',
+        type: feed.photo?'image/png':'video/mp4',
+        message: feed.description,
         social: Share.Social.WHATSAPP, // only for base64 file in Android
     };
     RNFetchBlob.config({
         fileCache : true,
-      }).fetch('GET','https://graphiste.com/blog/wp-content/uploads/2017/06/Affiche-test-court-Graphiste.jpg', {})
+      }).fetch('GET',feed.photo?feed.photo:feed.video, {})
       .then((res) => {
           imagePath = res.path();
           return res.readFile("base64");
       })
       .then(async  base64Data => {
-        var base64Data = `data:image/png;base64,` + base64Data;
+        var base64Data = `data:${shareOptions.type};base64,` + base64Data;
         if(network == 'facebook') {
-            console.log("reseau", network)
-            const shareLinkContent = {
-                contentType: 'link',
-                contentUrl: "https://graphiste.com/blog/wp-content/uploads/2017/06/Affiche-test-court-Graphiste.jpg",
-                quote: 'I am a message',
-            };
-          ShareDialog.show(shareLinkContent)
-          .then((resp) => {
+            shareOptions.social = Share.Social.FACEBOOK
+            shareOptions.contentDescription = feed.description
+            shareOptions.caption = feed.description
+            shareOptions.quote = feed.description
+            shareOptions.url = base64Data
+            Share.shareSingle(shareOptions)
+            .then((res) => {
+                dispatch(handleshareFeed(feed.id, 1))
                 dispatch(get_piece_or(2))
-          })
+            })
+            .catch((err) => { err && console.log(err); });
         }
-        if(network == 'twitter') shareOptions.social = Share.Social.TWITTER
-        
-        shareOptions.url = base64Data
-        Share.shareSingle(shareOptions)
-        .then((res) => { 
-            dispatch(get_piece_or(2))
-         })
-        .catch((err) => { err && console.log(err); });
-        
+        if(network == 'twitter') {
+            shareOptions.social = Share.Social.TWITTER
+            shareOptions.url = base64Data
+            Share.shareSingle(shareOptions)
+            .then((res) => {
+                dispatch(handleshareFeed(feed.id, 5))
+                dispatch(get_piece_or(2))
+            })
+            .catch((err) => { err && console.log(err); });
+        }
+        if(network == 'whatsapp'){
+            shareOptions.url = base64Data
+            Share.shareSingle(shareOptions)
+            .then((res) => {
+                dispatch(handleshareFeed(feed.id, 2))
+                dispatch(get_piece_or(2))
+            })
+            .catch((err) => { err && console.log(err); });
+        }
       })
     
 }
 
-const handleshareFeed = (idFeed, reseau, user) => {
+const handleshareFeed = (idFeed, reseau) => () => {
     auth(user).then((res) => {
         shareFeed(idFeed, {reseau}, res.data.access)
         .then((resp) => {
-            console.log("resp share feed", resp)
+            console.log("resp share feed", resp.data)
         })
         .catch((err) => {
             console.log("err share feed", err)
@@ -144,6 +156,7 @@ export const like_feed = (idFeed) => (dispatch) => {
     auth(user).then((res) => {
         onLike(idFeed, res.data.access)
         .then((resp) => {
+            const list_feed = store.getState().feed.list
             const feeds = [...list_feed]
             const index = feeds.findIndex(item => item.id == idFeed)
             if(feeds[index].likes.findIndex(item => item == userId) == -1){

@@ -1,6 +1,6 @@
 //import liraries
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TextInput } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux'
 
 import colors from '../../assets/themes/colors';
@@ -29,9 +29,11 @@ const ActiveAccount = ({navigation}) => {
                 style={styles.hotspotContainer}
             >
                 <Text style = {styles.title}>Un code d'activation vous a été envoyé par mail</Text>
-                <Input 
-                    placeholder="Code"
-                    onChangeText = {(code) => setCode(code)}
+                <TextInput
+                    placeholder = "Code"
+                    placeholderTextColor = "#777"
+                    style = {styles.input}
+                    onChangeText = {setCode}
                 />
                 <Btn 
                     title="Activer"
@@ -47,11 +49,10 @@ const ActiveAccount = ({navigation}) => {
 // define your styles
 const styles = StyleSheet.create({
     hotspotContainer: {
-        marginTop: '40%',
+        marginTop: 20,
         paddingHorizontal: 30,
         paddingTop: 50,
         paddingBottom: 20,
-
     },
     btn: {
         borderRadius: 50,
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.primary1
     },
     title: {
-        fontSize: 18,
+        // fontSize: 18,
         color: '#777'
     },
     container: {
@@ -68,6 +69,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#2c3e50',
+    },
+    input: {
+        borderBottomColor: '#f3f3f3',
+        borderBottomWidth: 1,
+        marginVertical: 10,
+        color: '#777'
     },
 });
 

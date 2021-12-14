@@ -16,19 +16,24 @@ import Input from '../../components/Input';
 import Picker from '../../components/Picker';
 import { dataSex, dataAgeRange }  from '@constants'
 import moment from 'moment';
+import { useDispatch, useSelector } from 'react-redux';
+import { get_register_form, storeUser } from '../../utils';
+import Loading from '../../components/Loading';
+import { register } from '@store/actions'
 
 const SignUp1 = ({navigation}) => {
 
     const [first_name, setFirstName] = useState();
     const [last_name, setLastName] = useState();
+    const [telephone, setTelephone] = useState()
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [date, setDate] = useState(moment(new Date()).format('YYYY-MM-DD'))
     const [sexe, setSex] = useState(dataSex[0].value);
     const [avatar, setAvatar] = useState(null);
     const [error, setError] = useState({})
-    const [show, setShow] = useState(false)
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const isLoading = useSelector(state => state.application.isLoading)
+    const dispatch = useDispatch()
 
     const handleSignUpStepTwo  = () => {
         if(email == undefined) setError({...error, email: "Email obligatoire"})
@@ -48,11 +53,36 @@ const SignUp1 = ({navigation}) => {
         })
     }
 
+    const handleSignUp = () => {
+        if(email == undefined) setError({...error, email: "Email obligatoire"})
+        if(password == undefined) setError({...error, password: "Mot de passe obligatoire"})
+        if(telephone == undefined) setError({...error, telephone: "Numéro de téléphone obligatoire"})
+        else{
+            const dataForm = new FormData()
+            dataForm.append("first_name", first_name)
+            dataForm.append("last_name", last_name)
+            dataForm.append("telephone", telephone)
+            dataForm.append("sexe", sexe)
+            dataForm.append("avatar", avatar != null? {
+                uri: avatar.uri,
+                type: avatar.type,
+                name: avatar.fileName
+            }: "")
+            dataForm.append("email", email)
+            dataForm.append("password", password)
+            dataForm.append("token", "")
+            console.log('dataForm', {email, password})
+            dispatch(register(dataForm, navigation, {email, password}))
+        }
+        
+    }
+
     return(
         <ScrollView 
             style = {styles.container}
             keyboardShouldPersistTaps = 'always'
         >
+            <Loading isVisible = {isLoading} />
             <View 
                 style={styles.hotspotContainer}
             >
@@ -104,6 +134,22 @@ const SignUp1 = ({navigation}) => {
                         />
                     </View>
                 </View>
+                <View style = {styles.content_input}>
+                    <View style = {styles.row}>
+                        <Ionicons 
+                            name = "call-outline"
+                            size = {25}
+                        />
+                        <TextInput
+                            placeholder = "Numéro de téléphone"
+                            placeholderTextColor = "#777"
+                            style = {styles.input}
+                            keyboardType = "number-pad"
+                            onChangeText = {setTelephone}
+                        />
+                    </View>
+                </View>
+                {error.telephone && <Text style = {styles.messageError}>{error.telephone}</Text>}
                 <View style = {styles.content_input}>
                     <View style = {styles.row}>
                         <Ionicons 
@@ -171,10 +217,10 @@ const SignUp1 = ({navigation}) => {
                     />
                 </View>
                 <Btn 
-                    title="SUIVANT"
-                    onPress={handleSignUpStepTwo}
+                    title="VALIDER"
+                    onPress={handleSignUp}
                     style={styles.btn}
-                    color={colors.primary1}
+                    color={colors.white}
                 />
             </View>
         </ScrollView>
@@ -218,9 +264,8 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     btn: {
-        borderWidth: 2,
         borderRadius: 10,
-        borderColor: colors.primary1,
+        backgroundColor: colors.primary1,
         marginTop: 30,
         bottom: 0
     },

@@ -7,6 +7,7 @@ import {ACTUALITES} from '../../constants/routeName';
 import ValidationCondition from '../../components/ValidationCondition';
 import { useDispatch, useSelector } from 'react-redux';
 import { get_missions_list } from '../../store/actions/missions';
+import Swiper from 'react-native-swiper'
 
 const Missions = ({navigation}) => {
 
@@ -20,12 +21,19 @@ const Missions = ({navigation}) => {
         dispatch(get_missions_list())
     }, [])
 
+    const selectedResponse = (value) => {
+        console.log('value', value)
+    }
+
     return(
         <View style = {styles.container}>
-            <FlatList
-                data = {list}
-                renderItem = {({item, index}) => <Mission item = {item} />}
-            />
+            <Swiper key = {list.length} height = '100%'  loop = {true} style={styles.wrapper}>
+                {
+                    list.map((item, index) =>(
+                        <Mission item = {item} selectedResponse = {selectedResponse} />
+                    ))
+                }
+            </Swiper>
         </View>
     )
 }
@@ -35,7 +43,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: colors.white,
         paddingTop: 30,
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
     },
     title: {
         fontSize: 20,
@@ -45,6 +53,11 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
         marginVertical: 20
     },
+    wrapper: {
+        paddingBottom: 150,
+        borderWidth: 10,
+        borderColor: '#000'
+    }
 });
 
 export default Missions;
