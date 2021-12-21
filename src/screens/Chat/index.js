@@ -7,6 +7,7 @@ import Input from '../../components/Input';
 import { useSelector, useDispatch, connect } from 'react-redux';
 import { get_chat_id } from '../../store/actions/chat';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { URL_WEBSOCKET } from '../../api/config';
 
 class Chat extends Component {
 
@@ -62,11 +63,7 @@ class Chat extends Component {
 
         await this.getChatId()
         console.log('id', this.props.idChat)
-        this.chatSocket = new WebSocket(
-            'wss://lamda-cm.herokuapp.com/ws/chat/'
-            + this.props.idChat
-            + '/'
-        );
+        this.chatSocket = new WebSocket(URL_WEBSOCKET+ this.props.idChat+ '/');
         this.chatSocket.onopen = (e) => {
             console.log("connected")
             this.fecthMessage()

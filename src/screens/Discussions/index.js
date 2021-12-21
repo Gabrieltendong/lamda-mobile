@@ -71,7 +71,7 @@ const Discussions = ({navigation}) => {
             <Loading isVisible = {isLoading} />
             <View style={styles.hContainer}>
                 {
-                    abonnes.length == 0?
+                    list_abonne.length == 0?
                     <View style = {styles.content_empty_message}>
                         <Text style = {styles.empty_message}>Aucun de tes contacts utilise Lamda pour le moment, inviter vos contacts a vous regoindre sur Lamda</Text>
                         <TouchableOpacity onPress = {shareApp} style = {styles.btn}>
@@ -80,7 +80,7 @@ const Discussions = ({navigation}) => {
                     </View>
                     :
                     <FlatList
-                        data = {abonnes}
+                        data = {list_abonne}
                         renderItem = {renderItem}
                         contentContainerStyle = {{paddingBottom: 50}}
                     />

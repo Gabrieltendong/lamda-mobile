@@ -37,7 +37,14 @@ const ProfileScreen = () => {
     }
 
     const handleUpdate = () => {
-        const data = {first_name, last_name, telephone, date_naissance, sexe}
+        const data = new FormData()
+        data.append('first_name', first_name)
+        data.append('last_name', last_name)
+        data.append('date_naissance', '1986-10-10')
+        data.append('sexe', sexe)
+        data.append('ville', 1)
+        console.log('data', data)
+        //const data = {first_name, last_name, telephone, date_naissance, sexe}
         
         dispatch(update_profil(data))
     }

@@ -1,4 +1,6 @@
 import Toast from 'react-native-toast-message';
+import Contacts from 'react-native-contacts';
+var _ = require('lodash')
 import { signUp, activeAccount,auth, getProfil, getAbonne, getPiecesOr, getNotifications, updateProfil } from '../../api'
 import { uiLoading } from './uiLoading'
 import {
@@ -131,12 +133,15 @@ export const get_abonne = () => (dispatch) => {
     auth(memoryUser)
     .then((res) => {
         getAbonne(res.data.access)
-        .then((resp) => {
+        .then(async (resp) => {
+            const contacts = await Contacts.getAll()
+            const numbers = _.keyBy(contacts, (contact) => contact?.phoneNumbers[0]?.number)
+            const newAbonneList = resp.data.filter(item => numbers[item.telephone])
             dispatch({
                 type: UPDATE_ABONNE_LIST,
-                value: resp.data
+                value: newAbonneList
             })
-            console.log("resp get abonne", resp.data)
+            console.log("resp get abonne", newAbonneList)
         })
         .catch((err) => {
             console.log("err abonne", err)
@@ -149,11 +154,10 @@ export const update_profil = (data) => (dispatch) => {
     const memoryUser = store.getState().userReducer.memoryUser
     auth(memoryUser)
     .then((res) => {
-        console.log("auth", res.data)
         updateProfil(res.data.abonne, data, res.data.access)
         .then((resp) => {
             dispatch(uiLoading())
-            dispatch(getProfilUser())
+            // dispatch(getProfilUser())
             Toast.show({
                 visibilityTime: 10000,
                 topOffset: 120,
