@@ -5,18 +5,24 @@ import { RadioButton } from 'react-native-paper';
 import { mixins } from '../../styles'
 
 // create a component
-const QuestionItem = ({item, selectedResponse, value}) => {
+const QuestionItem = ({item, selectedResponse, value, responses}) => {
     return (
         <View style={styles.container}>
             <Text style = {styles.title}>{item?.titre}</Text>
-            <RadioButton.Group onValueChange={selectedResponse} value={value}>
+            <RadioButton.Group onValueChange={(value) => selectedResponse(value, item)} value={value}>
                 {
-                    item.reponses.map((item) => (
-                        <View style = {styles.row}>
-                            <RadioButton value={item.id} />
-                            <Text style = {styles.title_response}>{item.titre}</Text>
-                        </View>
-                    ))
+                    item.reponses.map((item) => {
+                        const index = responses.findIndex((data) => data.reponse == item.id);
+                        return(
+                            <View style = {styles.row}>
+                                <RadioButton  
+                                    value={item.id}
+                                    status={ index != -1 ? 'checked' : 'unchecked' }
+                                />
+                                <Text style = {styles.title_response}>{item.titre}</Text>
+                            </View>
+                        )
+                    })
                 }
             </RadioButton.Group>
         </View>

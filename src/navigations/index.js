@@ -15,8 +15,6 @@ export default function AppNavContainer() {
 
   const user = useSelector(state => state.userReducer.user);
 
-  console.log("user", user)
-
   return (
     <NavigationContainer>
       <StatusBar translucent backgroundColor = "transparent" barStyle = "dark-content" />

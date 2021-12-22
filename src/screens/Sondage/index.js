@@ -1,15 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, ScrollView, FlatList } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, FlatList , Image} from 'react-native';
 import colors from '../../assets/themes/colors';
-import Mission from '../../components/Mission';
 import Btn from '../../components/Btn';
 import {ACTUALITES} from '../../constants/routeName';
 import ValidationCondition from '../../components/ValidationCondition';
 import { useDispatch, useSelector } from 'react-redux';
 import { get_missions_list } from '../../store/actions/missions';
-import Swiper from 'react-native-swiper'
+import SondageItem from '../../components/SondageItem';
 
-const Missions = ({navigation}) => {
+const SondageScreen = ({navigation}) => {
 
     const dispatch = useDispatch()
     const { list } = useSelector(state => state.missions)
@@ -26,15 +25,22 @@ const Missions = ({navigation}) => {
     }
 
     return(
-        <View style = {styles.container}>
-            <Swiper key = {list.length} height = '100%'  loop = {true} style={styles.wrapper}>
-                {
-                    list.map((item, index) =>(
-                        <Mission item = {item} selectedResponse = {selectedResponse} />
-                    ))
-                }
-            </Swiper>
-        </View>
+        <ScrollView 
+            style = {styles.container}
+            contentContainerStyle = {{paddingBottom: 40}}
+        >
+            <Image 
+                source={require('../../assets/images/winer.png')}
+                style = {styles.imageHeader} 
+                resizeMode='contain'
+            />
+            <Text style = {styles.title}>Gagner des points en partipant au sondage suivant:</Text>
+            {
+                list.map((item, index) =>(
+                    <SondageItem item = {item} selectedResponse = {selectedResponse} />
+                ))
+            }
+        </ScrollView>
     )
 }
 
@@ -43,21 +49,23 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: colors.white,
         paddingTop: 30,
-        paddingHorizontal: 20,
     },
     title: {
         fontSize: 20,
-        color: colors.primary1,
+        color: '#444',
         textAlign: 'center',
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
         marginVertical: 20
     },
     wrapper: {
         paddingBottom: 150,
         borderWidth: 10,
         borderColor: '#000'
+    },
+    imageHeader: {
+        height: 250,
+        width: '100%',
+        borderWidth: 1
     }
 });
 
-export default Missions;
+export default SondageScreen;

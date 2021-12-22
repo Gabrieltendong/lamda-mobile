@@ -40,7 +40,7 @@ export function DiscussionsStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen 
-        name={DISCUSSION}
+        name='Messenger'
         component={Discussions} 
         options={{headerShown: false}}
       />

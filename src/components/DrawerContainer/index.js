@@ -67,13 +67,13 @@ const DrawerContainer = ({navigation}) => {
                 <ScrollView contentContainerStyle = {{paddingBottom: 200}}>
                     <View style={styles.middle}>
                         <View style = {styles.row}>
-                            <TouchableOpacity style={styles.page} onPress={() => navigation.navigate(MISSIONS)}>
+                            <TouchableOpacity style={styles.page} onPress={() => navigation.navigate("SondageStack")}>
                                 <Ionicons 
                                     name="remove-circle"
                                     size={30}
                                     color={"#777"}
                                 />
-                                <Text style={{marginLeft: 10}}>Missions</Text>
+                                <Text style={{marginLeft: 10}}>Sondage</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.page} onPress={() => navigation.navigate(ACTUALITES)}>
                                 <Ionicons 
