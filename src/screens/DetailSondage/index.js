@@ -2,11 +2,15 @@ import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { useDispatch } from 'react-redux'
 import colors from '../../assets/themes/colors'
 import QuestionItem from '../../components/Questionitem'
+import { handleAnswer } from '../../store/actions/missions'
 var _ = require('lodash')
 
 const DetailSondageScreen = ({route}) => {
+
+    const dispatch = useDispatch()
     const {item} = route.params
     const [responses, setResponses] = useState([])
 
@@ -25,13 +29,24 @@ const DetailSondageScreen = ({route}) => {
         console.log('responses', responses)
     }
 
+    const handleSubmit = () => {
+        console.log("data",{ 
+        sondage: item.id,
+        reponses: responses
+    })
+    dispatch(handleAnswer({ 
+            sondage: item.id,
+            reponses: responses
+        }))
+    }
+
     return (
         <View style = {styles.container}>
             <FlatList
                 data={item.questions}
                 renderItem={({item}) => <QuestionItem responses = {responses} item={item} selectedResponse={selectedResponse} />}
             />
-            <TouchableOpacity style = {styles.btn}>
+            <TouchableOpacity style = {styles.btn} onPress={handleSubmit}>
                 <Ionicons 
                     name='checkmark'
                     size={25}

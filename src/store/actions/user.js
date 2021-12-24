@@ -154,6 +154,7 @@ export const update_profil = (data) => (dispatch) => {
     const memoryUser = store.getState().userReducer.memoryUser
     auth(memoryUser)
     .then((res) => {
+        console.log(res.data.access)
         updateProfil(res.data.abonne, data, res.data.access)
         .then((resp) => {
             dispatch(uiLoading())

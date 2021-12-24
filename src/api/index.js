@@ -237,7 +237,7 @@ export const getChatId = (token, idUser1, idUser2) => {
 
 
 export const answers = (token, data) => {
-    return http.post(`/answers/`, data, {
+    return http.post(`/answers`, data, {
         headers: {
             "Authorization": "Bearer " + token
         },
